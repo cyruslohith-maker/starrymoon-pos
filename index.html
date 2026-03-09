@@ -1297,6 +1297,59 @@
       display: flex;
       gap: 10px
     }
+
+    /* Status indicator */
+    .status-dot {
+      width: 8px;
+      height: 8px;
+      border-radius: 50%;
+      display: inline-block;
+      margin-right: 4px;
+      flex-shrink: 0
+    }
+
+    .status-dot.online {
+      background: #2d9e6b;
+      box-shadow: 0 0 6px rgba(45, 158, 107, .5)
+    }
+
+    .status-dot.offline {
+      background: #e8688a;
+      box-shadow: 0 0 6px rgba(232, 104, 138, .5);
+      animation: pulse 1.5s ease infinite
+    }
+
+    @keyframes pulse {
+
+      0%,
+      100% {
+        opacity: 1
+      }
+
+      50% {
+        opacity: .4
+      }
+    }
+
+    .pending-badge {
+      background: var(--gold);
+      color: var(--text-dark);
+      font-size: 9px;
+      font-weight: 900;
+      padding: 2px 7px;
+      border-radius: 20px;
+      margin-left: 4px;
+      white-space: nowrap
+    }
+
+    .status-bar {
+      display: flex;
+      align-items: center;
+      font-size: 10px;
+      font-weight: 800;
+      color: rgba(255, 255, 255, .85);
+      letter-spacing: .3px
+    }
   </style>
 </head>
 
@@ -1422,7 +1475,7 @@
     function renderMain() {
       return `<div class="app">
     <div class="header">
-      <div class="header-brand">${kitty(32)}<div><div class="brand-name">Starrymoon</div><div class="brand-tagline">✦ Handmade with love</div></div></div>
+      <div class="header-brand">${kitty(32)}<div><div class="brand-name">Starrymoon</div><div class="status-bar" id="status-bar"><span class="status-dot ${navigator.onLine ? 'online' : 'offline'}"></span>${navigator.onLine ? 'Online' : 'Offline'}${getQueueBadge()}</div></div></div>
       <div style="display:flex;gap:8px;align-items:center">
         <button class="btn-custom" id="hdr-custom" style="padding:7px 12px;font-size:11px">✎ Custom</button>
         <button class="btn-add-fab" id="hdr-add">+ Add</button>
@@ -1685,17 +1738,25 @@
         btn.disabled = true; btn.textContent = 'Recording ✦...';
         const d = db();
         const total = Math.round(p * qty * 100) / 100;
-        const { error: se } = await d.from('sales').insert({ item_id: item.id, qty, price_each: p, total, sold_at: new Date().toISOString(), is_custom: false, customer_name: '', order_note: '' });
-        if (se) { const e = document.getElementById('serr'); if (e) { e.className = 'error-msg'; e.textContent = '⚠ Failed — check connection'; } btn.disabled = false; btn.textContent = `✦ Sold ×${qty}`; return; }
-        // Optimistic lock on stock
-        const { error: ue } = await d.from('items').update({ stock: item.stock - qty }).eq('id', item.id).eq('stock', item.stock);
-        if (ue) { await loadItemsSilent(); const fresh = S.items.find(i => i.id === item.id); if (fresh && fresh.stock >= qty) { await d.from('items').update({ stock: fresh.stock - qty }).eq('id', item.id); } else { const e = document.getElementById('serr'); if (e) { e.className = 'error-msg'; e.textContent = '⚠ Stock changed — please retry'; } btn.disabled = false; btn.textContent = `✦ Sold ×${qty}`; return; } }
+        const saleRow = { item_id: item.id, qty, price_each: p, total, sold_at: new Date().toISOString(), is_custom: false, customer_name: '', order_note: '' };
+        let failed = false;
+        try {
+          const { error: se } = await d.from('sales').insert(saleRow);
+          if (se) throw se;
+          const { error: ue } = await d.from('items').update({ stock: item.stock - qty }).eq('id', item.id).eq('stock', item.stock);
+          if (ue) { await loadItemsSilent(); const fresh = S.items.find(i => i.id === item.id); if (fresh && fresh.stock >= qty) { await d.from('items').update({ stock: fresh.stock - qty }).eq('id', item.id); } else { const e = document.getElementById('serr'); if (e) { e.className = 'error-msg'; e.textContent = '⚠ Stock changed — please retry'; } btn.disabled = false; btn.textContent = `✦ Sold ×${qty}`; return; } }
+        } catch (_) {
+          failed = true;
+          addToQueue({ type: 'sale', data: saleRow, stockUpdate: { itemId: item.id, reduceBy: qty } });
+          toast('Saved offline — will sync later ⏳');
+        }
         S.items = S.items.map(i => i.id === item.id ? { ...i, stock: i.stock - qty } : i);
+        localStorage.setItem('sm_cache_items', JSON.stringify(S.items));
         S.sellItem = null; S.statsRev = null; S.summaryData = [];
         document.getElementById('sell-ov').innerHTML = '';
-        toast(`${item.name} sold!`);
+        if (!failed) toast(`${item.name} sold!`);
         patchGridOnly();
-        loadItemsSilent();
+        if (!failed) loadItemsSilent();
       };
     }
 
@@ -1772,17 +1833,19 @@
         const btn = document.getElementById('co-confirm');
         btn.disabled = true; btn.textContent = 'Recording ✦...';
         const d = db();
-        const note = `Customer: ${name} | ${desc}${advance > 0 ? ` | Advance: ₹${advance}` : ''}`;
-        const { error } = await d.from('sales').insert({
-          item_id: null, qty: 1, price_each: price, total: price,
-          sold_at: new Date().toISOString(),
-          is_custom: true, customer_name: name, order_note: desc,
-          advance_paid: advance
-        });
-        if (error) { err.className = 'error-msg'; err.textContent = '⚠ Failed: ' + error.message; btn.disabled = false; btn.textContent = '✦ Record Order'; return; }
+        const saleRow = { item_id: null, qty: 1, price_each: price, total: price, sold_at: new Date().toISOString(), is_custom: true, customer_name: name, order_note: desc, advance_paid: advance };
+        let failed = false;
+        try {
+          const { error } = await d.from('sales').insert(saleRow);
+          if (error) throw error;
+        } catch (_) {
+          failed = true;
+          addToQueue({ type: 'sale', data: saleRow });
+          toast('Saved offline — will sync later ⏳');
+        }
         S.statsRev = null; S.summaryData = [];
         document.getElementById('custom-ov').innerHTML = '';
-        toast(`Custom order for ${name} recorded!`);
+        if (!failed) toast(`Custom order for ${name} recorded!`);
         if (S.tab === 'sales') { S.salesLoading = true; await loadSales(); patchContent(); }
       };
     }
@@ -2019,29 +2082,59 @@
       };
     }
 
+    /* ── OFFLINE QUEUE HELPERS ── */
+    const Q_KEY = 'sm_offline_queue';
+    function getQueue() { try { return JSON.parse(localStorage.getItem(Q_KEY) || '[]'); } catch (_) { return []; } }
+    function saveQueue(q) { localStorage.setItem(Q_KEY, JSON.stringify(q)); }
+    function addToQueue(entry) { const q = getQueue(); q.push(entry); saveQueue(q); updateStatusBar(); }
+    function getQueueBadge() { const q = getQueue(); return q.length ? '<span class="pending-badge">⏳ ' + q.length + ' pending</span>' : ''; }
+    function updateStatusBar() {
+      const bar = document.getElementById('status-bar');
+      if (bar) bar.innerHTML = '<span class="status-dot ' + (navigator.onLine ? 'online' : 'offline') + '"></span>' + (navigator.onLine ? 'Online' : 'Offline') + getQueueBadge();
+    }
+
     /* ── DATA LOADING ── */
     async function loadItems() {
       S.itemsLoading = true;
-      const d = db(); if (!d) return;
-      const { data, error } = await d.from('items').select('*').order('name');
-      if (!error) S.items = data || [];
+      const d = db(); if (!d) { loadItemsFromCache(); return; }
+      try {
+        const { data, error } = await d.from('items').select('*').order('name');
+        if (!error && data) { S.items = data; localStorage.setItem('sm_cache_items', JSON.stringify(data)); }
+        else { loadItemsFromCache(); }
+      } catch (_) { loadItemsFromCache(); }
       S.itemsLoading = false;
       if (S.tab === 'inventory' && !S.addingItem) patchGridOnly();
     }
+    function loadItemsFromCache() {
+      try { const c = JSON.parse(localStorage.getItem('sm_cache_items') || '[]'); if (c.length) S.items = c; } catch (_) { }
+      S.itemsLoading = false;
+    }
     async function loadItemsSilent() {
       const d = db(); if (!d) return;
-      const { data } = await d.from('items').select('*').order('name');
-      if (data) S.items = data;
+      try {
+        const { data } = await d.from('items').select('*').order('name');
+        if (data) { S.items = data; localStorage.setItem('sm_cache_items', JSON.stringify(data)); }
+      } catch (_) { }
     }
     async function loadSales() {
       S.salesLoading = true;
-      const d = db(); if (!d) return;
-      const [{ data: sales, count }, { data: items }] = await Promise.all([
-        d.from('sales').select('*', { count: 'exact' }).order('sold_at', { ascending: false }).range(0, PAGE - 1),
-        d.from('items').select('id,name,variant,category'),
-      ]);
-      const m = {}; (items || []).forEach(i => m[i.id] = i);
-      S.sales = sales || []; S.salesTotal = count || 0; S.iMap = m; S.salesPage = 0; S.salesLoading = false;
+      const d = db(); if (!d) { loadSalesFromCache(); return; }
+      try {
+        const [{ data: sales, count }, { data: items }] = await Promise.all([
+          d.from('sales').select('*', { count: 'exact' }).order('sold_at', { ascending: false }).range(0, PAGE - 1),
+          d.from('items').select('id,name,variant,category'),
+        ]);
+        const m = {}; (items || []).forEach(i => m[i.id] = i);
+        S.sales = sales || []; S.salesTotal = count || 0; S.iMap = m; S.salesPage = 0; S.salesLoading = false;
+        localStorage.setItem('sm_cache_sales', JSON.stringify({ sales: S.sales, total: S.salesTotal, iMap: S.iMap }));
+      } catch (_) { loadSalesFromCache(); }
+    }
+    function loadSalesFromCache() {
+      try {
+        const c = JSON.parse(localStorage.getItem('sm_cache_sales') || '{}');
+        if (c.sales) { S.sales = c.sales; S.salesTotal = c.total || 0; S.iMap = c.iMap || {}; }
+      } catch (_) { }
+      S.salesPage = 0; S.salesLoading = false;
     }
     async function loadMoreSales() {
       const d = db(); if (!d) return;
@@ -2155,9 +2248,49 @@
       if (_rtChannel) { const d = db(); if (d) d.removeChannel(_rtChannel); _rtChannel = null; }
     }
 
+    /* ── OFFLINE QUEUE SYNC ── */
+    async function processQueue() {
+      const q = getQueue();
+      if (!q.length || !navigator.onLine) return;
+      const d = db(); if (!d) return;
+      const remaining = [];
+      for (const entry of q) {
+        try {
+          if (entry.type === 'sale') {
+            const { error } = await d.from('sales').insert(entry.data);
+            if (error) { remaining.push(entry); continue; }
+            if (entry.stockUpdate) {
+              const item = S.items.find(i => i.id === entry.stockUpdate.itemId);
+              if (item) await d.from('items').update({ stock: item.stock }).eq('id', entry.stockUpdate.itemId);
+            }
+          }
+        } catch (_) { remaining.push(entry); }
+      }
+      saveQueue(remaining);
+      updateStatusBar();
+      if (q.length > remaining.length) {
+        toast('✦ ' + (q.length - remaining.length) + ' pending sale(s) synced!');
+        loadItemsSilent(); loadSales();
+      }
+    }
+
     async function boot() {
+      // Load cached data first for instant display
+      loadItemsFromCache();
+      loadSalesFromCache();
       render();
-      if (db()) { loadItems(); startRealtime(); }
+      if (db()) {
+        loadItems();
+        startRealtime();
+        processQueue();
+      }
+      // Online/offline listeners
+      window.addEventListener('online', () => { updateStatusBar(); toast('Back online ✦'); processQueue(); loadItems(); loadSales(); });
+      window.addEventListener('offline', () => { updateStatusBar(); toast('You are offline 📴'); });
+      // Register Service Worker
+      if ('serviceWorker' in navigator) {
+        navigator.serviceWorker.register('./sw.js').catch(() => { });
+      }
     }
     boot();
   </script>
