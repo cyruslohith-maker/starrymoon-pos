@@ -1298,6 +1298,215 @@
       gap: 10px
     }
 
+    /* Upload progress */
+    .upload-progress {
+      margin: 8px 0;
+      display: none
+    }
+
+    .upload-bar-bg {
+      background: var(--pink-pale);
+      border-radius: 6px;
+      height: 8px;
+      overflow: hidden
+    }
+
+    .upload-bar-fill {
+      height: 8px;
+      background: linear-gradient(90deg, var(--pink), var(--pink-deep));
+      border-radius: 6px;
+      transition: width .2s;
+      width: 0%
+    }
+
+    .upload-label {
+      font-size: 10px;
+      font-weight: 800;
+      color: var(--text-mid);
+      margin-top: 4px;
+      text-align: center
+    }
+
+    /* Edit modal */
+    .edit-modal-wrap {
+      position: fixed;
+      inset: 0;
+      background: rgba(74, 32, 64, .55);
+      z-index: 250;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      backdrop-filter: blur(3px)
+    }
+
+    .edit-modal {
+      background: var(--cream);
+      border-radius: var(--radius);
+      padding: 28px 24px;
+      max-width: 360px;
+      width: 90%;
+      text-align: center;
+      border: 3px solid var(--pink-light);
+      box-shadow: 0 8px 40px rgba(255, 143, 171, .35)
+    }
+
+    .edit-modal h3 {
+      font-size: 16px;
+      font-weight: 900;
+      color: var(--text-dark);
+      margin-bottom: 6px
+    }
+
+    .edit-modal p {
+      font-size: 13px;
+      color: var(--text-mid);
+      margin-bottom: 18px;
+      line-height: 1.5
+    }
+
+    .edit-modal .field {
+      margin-bottom: 16px
+    }
+
+    .edit-modal .field label {
+      font-size: 12px;
+      font-weight: 800;
+      color: var(--text-dark);
+      margin-bottom: 6px;
+      display: block;
+      text-align: left
+    }
+
+    .edit-modal .field input {
+      width: 100%;
+      padding: 10px 12px;
+      border: 1px solid var(--pink-pale);
+      border-radius: 8px;
+      font-size: 14px;
+      color: var(--text-dark);
+      background: white
+    }
+
+    .edit-modal .field input:focus {
+      outline: none;
+      border-color: var(--pink-deep);
+      box-shadow: 0 0 0 2px rgba(232, 104, 138, .2)
+    }
+
+    .edit-modal-actions {
+      display: flex;
+      gap: 10px;
+      justify-content: center
+    }
+
+    /* Restock modal */
+    .restock-modal-wrap {
+      position: fixed;
+      inset: 0;
+      background: rgba(74, 32, 64, .55);
+      z-index: 250;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      backdrop-filter: blur(3px)
+    }
+
+    .restock-modal {
+      background: var(--cream);
+      border-radius: var(--radius);
+      padding: 28px 24px;
+      max-width: 320px;
+      width: 90%;
+      text-align: center;
+      border: 3px solid var(--pink-light);
+      box-shadow: 0 8px 40px rgba(255, 143, 171, .35)
+    }
+
+    .restock-modal h3 {
+      font-size: 16px;
+      font-weight: 900;
+      color: var(--text-dark);
+      margin-bottom: 6px
+    }
+
+    .restock-modal p {
+      font-size: 13px;
+      color: var(--text-mid);
+      margin-bottom: 18px;
+      line-height: 1.5
+    }
+
+    .restock-modal .field {
+      margin-bottom: 16px
+    }
+
+    .restock-modal .field label {
+      font-size: 12px;
+      font-weight: 800;
+      color: var(--text-dark);
+      margin-bottom: 6px;
+      display: block;
+      text-align: left
+    }
+
+    .restock-modal .field input {
+      width: 100%;
+      padding: 10px 12px;
+      border: 1px solid var(--pink-pale);
+      border-radius: 8px;
+      font-size: 14px;
+      color: var(--text-dark);
+      background: white
+    }
+
+    .restock-modal .field input:focus {
+      outline: none;
+      border-color: var(--pink-deep);
+      box-shadow: 0 0 0 2px rgba(232, 104, 138, .2)
+    }
+
+    .restock-modal-actions {
+      display: flex;
+      gap: 10px;
+      justify-content: center
+    }
+
+    /* Undo toast */
+    .toast-undo {
+      position: fixed;
+      top: 70px;
+      left: 50%;
+      transform: translateX(-50%);
+      background: linear-gradient(135deg, var(--pink) 0%, var(--pink-deep) 100%);
+      color: white;
+      padding: 10px 14px 10px 20px;
+      border-radius: 50px;
+      font-weight: 900;
+      font-size: 13px;
+      z-index: 999;
+      box-shadow: 0 4px 20px rgba(232, 104, 138, .5);
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      white-space: nowrap
+    }
+
+    .undo-btn {
+      background: rgba(255, 255, 255, .25);
+      border: none;
+      color: white;
+      font-family: 'Nunito', sans-serif;
+      font-weight: 900;
+      font-size: 12px;
+      padding: 5px 12px;
+      border-radius: 20px;
+      cursor: pointer
+    }
+
+    .undo-btn:active {
+      background: rgba(255, 255, 255, .4)
+    }
+
     /* Status indicator */
     .status-dot {
       width: 8px;
@@ -1363,6 +1572,7 @@
   <div id="custom-ov"></div>
   <div id="lightbox-ov"></div>
   <div id="confirm-ov"></div>
+  <div id="edit-ov"></div>
 
   <script>
     const SURL = 'sm_supabase_url', SKEY = 'sm_supabase_key';
@@ -1380,11 +1590,12 @@
 
     let S = {
       screen: localStorage.getItem(SURL) ? 'main' : 'setup',
-      tab: 'inventory', addingItem: false,
+      tab: 'inventory', addingItem: false, editingItem: null,
       items: [], itemsLoading: true,
       sales: [], salesLoading: true, salesPage: 0, salesTotal: 0, iMap: {},
       sellItem: null, showCustomOrder: false,
-      search: '', cat: 'All',
+      search: '', cat: 'All', invSort: 'name',
+      salesDateFilter: 'all',
       statsRev: null, statsProfit: null,
       summarySort: 'revenue', summaryLoading: false, summaryData: [],
     };
@@ -1522,12 +1733,22 @@
     }
 
     /* ── INVENTORY ── */
+    function sortItems(arr) {
+      const s = S.invSort;
+      if (s === 'price') return [...arr].sort((a, b) => (b.selling_price || 0) - (a.selling_price || 0));
+      if (s === 'stock') return [...arr].sort((a, b) => a.stock - b.stock);
+      if (s === 'newest') return [...arr].sort((a, b) => new Date(b.created_at || 0) - new Date(a.created_at || 0));
+      return [...arr].sort((a, b) => (a.name || '').localeCompare(b.name || ''));
+    }
     function renderInventory() {
       let filtered = S.items;
       if (S.cat !== 'All') filtered = filtered.filter(i => i.category === S.cat);
       if (S.search) { const q = S.search.toLowerCase(); filtered = filtered.filter(i => (i.name || '').toLowerCase().includes(q) || (i.variant || '').toLowerCase().includes(q) || (i.sku || '').toLowerCase().includes(q)); }
+      filtered = sortItems(filtered);
       const usedCats = ['All', ...CATS.filter(c => S.items.some(i => i.category === c))];
       const chips = usedCats.map(c => `<div class="filter-chip${S.cat === c ? ' active' : ''}" data-cat="${esc(c)}">${c === 'All' ? '✦ All' : `${EMOJI[c] || ''} ${c}`}</div>`).join('');
+      const sorts = [['name', 'A-Z'], ['price', '₹ Price'], ['stock', 'Stock'], ['newest', 'Newest']];
+      const sortChips = sorts.map(([k, l]) => `<div class="filter-chip${S.invSort === k ? ' active' : ''}" data-invsort="${k}">${l}</div>`).join('');
       const cards = filtered.map(item => {
         const sc = item.stock === 0 ? 'stock-out' : item.stock <= 2 ? 'stock-low' : 'stock-ok';
         const sl = item.stock === 0 ? 'Sold out' : item.stock <= 2 ? `${item.stock} left ⚠` : `${item.stock} left`;
@@ -1548,6 +1769,7 @@
     <input class="search-input" id="inv-s" placeholder="Search items..." value="${esc(S.search)}"/>
   </div>
   <div class="filter-bar" id="filter-bar">${chips}</div>
+  <div class="filter-bar" id="sort-bar" style="padding-top:4px">${sortChips}</div>
   <div id="grid-wrap">
     ${S.itemsLoading
           ? '<div class="loading"><div class="spinner"></div><span>Loading ✦</span></div>'
@@ -1560,12 +1782,14 @@
       const si = document.getElementById('inv-s');
       if (si) { si.oninput = e => { S.search = e.target.value; patchGridOnly(); }; si.onfocus = e => e.target.select(); }
       document.querySelectorAll('.filter-chip[data-cat]').forEach(c => { c.onclick = () => { S.cat = c.dataset.cat; patchGridOnly(); patchFilterBar(); }; });
+      document.querySelectorAll('.filter-chip[data-invsort]').forEach(c => { c.onclick = () => { S.invSort = c.dataset.invsort; patchContent(); }; });
       bindCards();
     }
     function patchGridOnly() {
       let filtered = S.items;
       if (S.cat !== 'All') filtered = filtered.filter(i => i.category === S.cat);
       if (S.search) { const q = S.search.toLowerCase(); filtered = filtered.filter(i => (i.name || '').toLowerCase().includes(q) || (i.variant || '').toLowerCase().includes(q) || (i.sku || '').toLowerCase().includes(q)); }
+      filtered = sortItems(filtered);
       const cards = filtered.map(item => {
         const sc = item.stock === 0 ? 'stock-out' : item.stock <= 2 ? 'stock-low' : 'stock-ok';
         const sl = item.stock === 0 ? 'Sold out' : item.stock <= 2 ? `${item.stock} left ⚠` : `${item.stock} left`;
@@ -1597,6 +1821,11 @@
           const item = S.items.find(i => i.id === card.dataset.id);
           if (item && item.stock > 0) openSellModal(item);
         };
+        // Long-press to edit
+        let lpt = null;
+        card.addEventListener('touchstart', () => { lpt = setTimeout(() => { const item = S.items.find(i => i.id === card.dataset.id); if (item) openEditModal(item); }, 600); }, { passive: true });
+        card.addEventListener('touchend', () => clearTimeout(lpt));
+        card.addEventListener('touchmove', () => clearTimeout(lpt));
       });
       document.querySelectorAll('.item-img img[data-full]').forEach(img => {
         img.style.cursor = 'zoom-in';
@@ -1646,23 +1875,135 @@
       patchGridOnly(); patchFilterBar();
     }
 
-    /* ── DELETE SALE ── */
-    async function deleteSale(sale) {
-      const d = db(); if (!d) return;
-      const { error } = await d.from('sales').delete().eq('id', sale.id);
-      if (error) { toast('Failed to delete sale'); return; }
-      if (!sale.is_custom && sale.item_id) {
-        const item = S.items.find(i => i.id === sale.item_id);
-        if (item) {
-          await d.from('items').update({ stock: item.stock + sale.qty }).eq('id', item.id);
-          item.stock += sale.qty;
-        }
-      }
+    /* ── EDIT ITEM ── */
+    function openEditModal(item) {
+      const ov = document.getElementById('edit-ov');
+      ov.innerHTML = `<div class="edit-modal-wrap" id="em-bg">
+        <div class="edit-modal">
+          <h3>✎ Edit ${esc(item.name)}</h3>
+          <div class="field"><label>Name</label><input id="em-name" value="${esc(item.name)}"/></div>
+          <div class="field"><label>Variant</label><input id="em-var" value="${esc(item.variant || '')}"/></div>
+          <div class="field"><label>Cost ₹</label><input id="em-cost" type="number" inputmode="decimal" value="${item.cost_price || 0}"/></div>
+          <div class="field"><label>Sell ₹</label><input id="em-sell" type="number" inputmode="decimal" value="${item.selling_price || 0}"/></div>
+          <div class="field"><label>Stock</label><input id="em-stock" type="number" inputmode="numeric" value="${item.stock || 0}"/></div>
+          <div id="em-err" style="color:var(--pink-deep);font-size:12px;margin-bottom:8px"></div>
+          <div class="edit-modal-actions">
+            <button class="btn btn-ghost" style="flex:1" id="em-cancel">Cancel</button>
+            <button class="btn btn-primary" style="flex:1" id="em-restock">📦 Quick Restock</button>
+            <button class="btn btn-primary" style="flex:1" id="em-save">✦ Save</button>
+          </div>
+        </div>
+      </div>`;
+      const close = () => ov.innerHTML = '';
+      document.getElementById('em-bg').onclick = e => { if (e.target.id === 'em-bg') close(); };
+      document.getElementById('em-cancel').onclick = close;
+      document.getElementById('em-restock').onclick = () => { close(); openRestockModal(item); };
+      document.getElementById('em-save').onclick = async () => {
+        const name = document.getElementById('em-name').value.trim();
+        if (!name) { document.getElementById('em-err').textContent = 'Name required'; return; }
+        const btn = document.getElementById('em-save');
+        btn.disabled = true; btn.textContent = 'Saving...';
+        const d = db(); if (!d) return;
+        const updates = {
+          name,
+          variant: document.getElementById('em-var').value.trim(),
+          cost_price: parseFloat(document.getElementById('em-cost').value) || 0,
+          selling_price: parseFloat(document.getElementById('em-sell').value) || 0,
+          stock: parseInt(document.getElementById('em-stock').value) || 0
+        };
+        const { error } = await d.from('items').update(updates).eq('id', item.id);
+        if (error) { document.getElementById('em-err').textContent = error.message; btn.disabled = false; btn.textContent = '✦ Save'; return; }
+        Object.assign(item, updates);
+        localStorage.setItem('sm_cache_items', JSON.stringify(S.items));
+        close();
+        toast(name + ' updated!');
+        patchGridOnly();
+      };
+    }
+
+    /* ── QUICK RESTOCK ── */
+    function openRestockModal(item) {
+      const ov = document.getElementById('edit-ov');
+      ov.innerHTML = `<div class="restock-modal-wrap" id="rs-bg">
+        <div class="restock-modal">
+          <h3>📦 Restock ${esc(item.name)}</h3>
+          <p>Current stock: <strong>${item.stock}</strong></p>
+          <div style="display:flex;gap:8px;justify-content:center;margin-bottom:16px">
+            <button class="btn btn-primary" data-rqty="1" style="padding:8px 16px">+1</button>
+            <button class="btn btn-primary" data-rqty="5" style="padding:8px 16px">+5</button>
+            <button class="btn btn-primary" data-rqty="10" style="padding:8px 16px">+10</button>
+          </div>
+          <div class="field"><label>Custom amount</label><input id="rs-custom" type="number" inputmode="numeric" placeholder="e.g. 25"/></div>
+          <div class="restock-modal-actions">
+            <button class="btn btn-ghost" style="flex:1" id="rs-cancel">Cancel</button>
+            <button class="btn btn-primary" style="flex:1" id="rs-add">✦ Add Custom</button>
+          </div>
+        </div>
+      </div>`;
+      const close = () => ov.innerHTML = '';
+      document.getElementById('rs-bg').onclick = e => { if (e.target.id === 'rs-bg') close(); };
+      document.getElementById('rs-cancel').onclick = close;
+      const doRestock = async (addQty) => {
+        const d = db(); if (!d) return;
+        const newStock = item.stock + addQty;
+        const { error } = await d.from('items').update({ stock: newStock }).eq('id', item.id);
+        if (error) { toast('Restock failed'); return; }
+        item.stock = newStock;
+        localStorage.setItem('sm_cache_items', JSON.stringify(S.items));
+        close();
+        toast(item.name + ' +' + addQty + ' → ' + newStock + ' in stock');
+        patchGridOnly();
+      };
+      document.querySelectorAll('[data-rqty]').forEach(b => { b.onclick = () => doRestock(parseInt(b.dataset.rqty)); });
+      document.getElementById('rs-add').onclick = () => {
+        const v = parseInt(document.getElementById('rs-custom').value);
+        if (!v || v < 1) return;
+        doRestock(v);
+      };
+    }
+
+    /* ── DELETE SALE (with undo) ── */
+    let _undoTimer = null;
+    let _undoEl = null;
+    function deleteSaleWithUndo(sale) {
+      // Remove from UI immediately
       S.sales = S.sales.filter(s => s.id !== sale.id);
       S.salesTotal = Math.max(0, S.salesTotal - 1);
-      S.summaryData = []; S.statsRev = null;
-      toast('Sale record deleted');
       patchContent();
+      // Show undo toast
+      if (_undoEl) _undoEl.remove();
+      clearTimeout(_undoTimer);
+      const el = document.createElement('div');
+      el.className = 'toast-undo';
+      el.innerHTML = 'Sale deleted <button class="undo-btn" id="undo-sale">Undo</button>';
+      document.body.appendChild(el);
+      _undoEl = el;
+      const finalize = async () => {
+        el.remove(); _undoEl = null;
+        const d = db(); if (!d) return;
+        const { error } = await d.from('sales').delete().eq('id', sale.id);
+        if (error) { toast('Delete failed — restored'); S.sales.unshift(sale); S.salesTotal++; patchContent(); return; }
+        if (!sale.is_custom && sale.item_id) {
+          const item = S.items.find(i => i.id === sale.item_id);
+          if (item) {
+            await d.from('items').update({ stock: item.stock + sale.qty }).eq('id', item.id);
+            item.stock += sale.qty;
+            localStorage.setItem('sm_cache_items', JSON.stringify(S.items));
+            patchGridOnly();
+          }
+        }
+        S.summaryData = []; S.statsRev = null;
+      };
+      document.getElementById('undo-sale').onclick = () => {
+        clearTimeout(_undoTimer);
+        el.remove(); _undoEl = null;
+        S.sales.push(sale);
+        S.sales.sort((a, b) => new Date(b.sold_at) - new Date(a.sold_at));
+        S.salesTotal++;
+        patchContent();
+        toast('Sale restored ✦');
+      };
+      _undoTimer = setTimeout(finalize, 5000);
     }
 
     /* ── SELL MODAL ── */
@@ -1863,8 +2204,12 @@
       <div class="form-card-header">📸 Photo</div>
       <div class="form-body">
         <div class="img-upload" id="img-zone">
-          <input type="file" accept="image/*" capture="environment" id="img-in" style="display:none"/>
+          <input type="file" accept="image/*" id="img-in" style="display:none"/>
           <div id="img-prev"><div style="font-size:36px">📷</div><div class="img-upload-text">Tap to take photo or upload ✦</div></div>
+        </div>
+        <div class="upload-progress" id="upload-prog">
+          <div class="upload-bar-bg"><div class="upload-bar-fill" id="upload-fill"></div></div>
+          <div class="upload-label" id="upload-lbl">Uploading...</div>
         </div>
       </div>
     </div>
@@ -1912,10 +2257,40 @@
         const d = db();
         let img_url = '';
         if (_imgFile) {
+          const prog = document.getElementById('upload-prog');
+          const fill = document.getElementById('upload-fill');
+          const lbl = document.getElementById('upload-lbl');
+          prog.style.display = 'block';
+          fill.style.width = '0%'; lbl.textContent = 'Uploading photo...';
           const ext = _imgFile.name.split('.').pop();
           const path = `items/${Date.now()}_${Math.random().toString(36).slice(2)}.${ext}`;
-          const { error: ue } = await d.storage.from('stall-images').upload(path, _imgFile, { upsert: true });
-          if (!ue) { const { data: pub } = d.storage.from('stall-images').getPublicUrl(path); img_url = pub.publicUrl; }
+          try {
+            // Use XHR for progress tracking
+            const url = localStorage.getItem(SURL) + '/storage/v1/object/stall-images/' + path;
+            const key = localStorage.getItem(SKEY);
+            await new Promise((resolve, reject) => {
+              const xhr = new XMLHttpRequest();
+              xhr.open('POST', url);
+              xhr.setRequestHeader('Authorization', 'Bearer ' + key);
+              xhr.setRequestHeader('apikey', key);
+              xhr.setRequestHeader('x-upsert', 'true');
+              xhr.upload.onprogress = (e) => {
+                if (e.lengthComputable) {
+                  const pct = Math.round((e.loaded / e.total) * 100);
+                  fill.style.width = pct + '%';
+                  lbl.textContent = pct < 100 ? 'Uploading... ' + pct + '%' : 'Processing...';
+                }
+              };
+              xhr.onload = () => { if (xhr.status >= 200 && xhr.status < 300) resolve(); else reject(new Error('Upload failed')); };
+              xhr.onerror = () => reject(new Error('Upload failed'));
+              xhr.send(_imgFile);
+            });
+            fill.style.width = '100%'; lbl.textContent = 'Upload complete ✦';
+            const { data: pub } = d.storage.from('stall-images').getPublicUrl(path);
+            img_url = pub.publicUrl;
+          } catch (e) {
+            lbl.textContent = 'Upload failed — saving without photo';
+          }
         }
         const { error } = await d.from('items').insert({ name, variant: document.getElementById('fv').value.trim(), category: selCat, sku: document.getElementById('fs').value.trim(), cost_price: parseFloat(document.getElementById('fc').value) || 0, selling_price: parseFloat(document.getElementById('fp').value) || 0, stock: parseInt(qty) || 0, img_url });
         if (error) { err.textContent = error.message; err.style.display = 'block'; btn.disabled = false; btn.textContent = '✦ Add Item'; return; }
@@ -1924,12 +2299,23 @@
     }
 
     /* ── SALES LOG ── */
+    function getDateFilteredSales() {
+      if (S.salesDateFilter === 'all') return S.sales;
+      const now = new Date();
+      const startOfDay = new Date(now.getFullYear(), now.getMonth(), now.getDate());
+      let cutoff = startOfDay;
+      if (S.salesDateFilter === 'week') { cutoff = new Date(startOfDay); cutoff.setDate(cutoff.getDate() - 7); }
+      if (S.salesDateFilter === 'month') { cutoff = new Date(startOfDay); cutoff.setMonth(cutoff.getMonth() - 1); }
+      return S.sales.filter(s => new Date(s.sold_at) >= cutoff);
+    }
     function renderSales() {
-      const rev = S.sales.reduce((s, x) => s + (x.total || 0), 0);
-      const units = S.sales.reduce((s, x) => s + (x.is_custom ? 0 : (x.qty || 0)), 0);
-      const customs = S.sales.filter(x => x.is_custom).length;
-      const avg = S.sales.length ? Math.round(rev / S.sales.length) : 0;
-      const rows = S.sales.map(s => {
+      const filtered = getDateFilteredSales();
+      const rev = filtered.reduce((s, x) => s + (x.total || 0), 0);
+      const units = filtered.reduce((s, x) => s + (x.is_custom ? 0 : (x.qty || 0)), 0);
+      const customs = filtered.filter(x => x.is_custom).length;
+      const avg = filtered.length ? Math.round(rev / filtered.length) : 0;
+      const dateChips = [['all', 'All Time'], ['today', 'Today'], ['week', 'This Week'], ['month', 'This Month']].map(([k, l]) => `<div class="filter-chip${S.salesDateFilter === k ? ' active' : ''}" data-datefilter="${k}">${l}</div>`).join('');
+      const rows = filtered.map(s => {
         const it = S.iMap[s.item_id] || {};
         const t = new Date(s.sold_at).toLocaleTimeString('en-IN', { hour: '2-digit', minute: '2-digit' });
         if (s.is_custom) {
@@ -1950,15 +2336,16 @@
       <div style="display:flex;align-items:center;gap:4px"><div class="sale-amount">₹${s.total}</div><button class="sale-delete" data-saleid="${esc(s.id)}" title="Delete sale">🗑</button></div>
     </div>`;
       }).join('');
-      return `<div class="stats-grid">
+      return `<div class="filter-bar" style="margin-bottom:8px">${dateChips}</div>
+  <div class="stats-grid">
     <div class="stat-card"><div class="stat-val">₹${rev.toLocaleString('en-IN')}</div><div class="stat-label">Revenue</div></div>
     <div class="stat-card"><div class="stat-val">${units}</div><div class="stat-label">Units Sold</div></div>
-    <div class="stat-card"><div class="stat-val">${S.sales.length}</div><div class="stat-label">Transactions</div></div>
+    <div class="stat-card"><div class="stat-val">${filtered.length}</div><div class="stat-label">Transactions</div></div>
     <div class="stat-card"><div class="stat-val">${customs}</div><div class="stat-label">Custom Orders</div></div>
   </div>
   ${S.salesLoading
           ? '<div class="loading"><div class="spinner"></div><span>Loading ✦</span></div>'
-          : S.sales.length === 0
+          : filtered.length === 0
             ? '<div class="empty">🌸<br><br>No sales yet~</div>'
             : `<div class="sales-list">${rows}</div>
         ${S.sales.length < S.salesTotal ? `<div class="load-more"><button class="btn btn-ghost" id="lm-btn">Load ${Math.min(PAGE, S.salesTotal - S.sales.length)} more</button></div>` : ''}`
@@ -1967,10 +2354,13 @@
     function bindSales() {
       const btn = document.getElementById('lm-btn');
       if (btn) btn.onclick = loadMoreSales;
+      document.querySelectorAll('.filter-chip[data-datefilter]').forEach(c => {
+        c.onclick = () => { S.salesDateFilter = c.dataset.datefilter; patchContent(); };
+      });
       document.querySelectorAll('.sale-delete[data-saleid]').forEach(b => {
         b.onclick = () => {
           const sale = S.sales.find(s => s.id === b.dataset.saleid);
-          if (sale) confirmAction('Delete this sale?', sale.is_custom ? 'Custom order for ' + esc(sale.customer_name || 'unknown') : 'This will restore ' + sale.qty + ' unit(s) to stock.', async () => { await deleteSale(sale); });
+          if (sale) deleteSaleWithUndo(sale);
         };
       });
     }
